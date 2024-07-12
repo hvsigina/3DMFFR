@@ -1,69 +1,157 @@
+
+from ast import Interactive, Lambda
+from logging import PlaceHolder
 import numpy as np
 import gradio as gr
 
-
-image_count = 0
-
-def change_tab(i):
-    return gr.Tabs(selected=i)
-
-def goto_step2():
-    return change_tab(2)
-
-def goto_step3():
-    return change_tab(3)
-
-def goto_step4():
-    return change_tab(4)
-
-def galFunc():
-    global image_count
-    image_count = image_count+1
+def tab1_faceset_extract():
     return
+
+def tab1_config_set():
+    return
+
+def tab1_input_gallery_update(upload,gallery,count):
+    
+    if gallery is None:
+        img_list = []
+    else:
+        img_list = gallery
+    
+    img_list.append(upload)
+    return gr.Image(value=None),gr.Gallery(value=img_list),str(int(count)+1)
+
+def tab1_advanced_settings(value, evt: gr.EventData):
+    #Check if checkbox is enabled or not
+    if value: 
+        return [gr.Slider(interactive=False),gr.Slider(interactive=False),gr.Slider(interactive=True),gr.Slider(interactive=True),gr.Radio(interactive=True)]
+    else:
+        return [gr.Slider(interactive=True),gr.Slider(interactive=True),gr.Slider(interactive=False),gr.Slider(interactive=False),gr.Radio(interactive=False)]
+
+def tab1_faceset_extract():
+    #Run faceset extract task
+    
+    #Faceset gallery and step2 button clickable
+    return [gr.Gallery(interactive=True),gr.Button(interactive=True)]
+
+step1_str="Step 1: Faceset extraction"
+step2_str="Step 2: Landmarks creation and options selection"
+step3_str="Step 3: Training"
+step4_str="Step 4: Object Creation"
 
 demo = gr.Blocks()
 
 with demo:
     gr.Markdown(
         """
-    # 3DMFFR
-    3D Face Reconstruction from one or Multiple 2D images, using cuda-accelerated renderer.
+    # **3DMFFR : 3-DIMENSIONAL MULTI FRAME FACE RECONSTRUCTION**
+    *3D Face Reconstruction from one or Multiple 2D images, using cuda-accelerated renderer.*
     """
     )
+    #BODY
     with gr.Tabs() as tabs:
-        with gr.TabItem("Step 1: Faceset extraction", id=1 ):
+
+        with gr.Tab(step1_str, id=1) as tab1:
+            gr.Markdown(
+            """ 
+            ## """ + step1_str + """
+            """)
             with gr.Row():
-                text_input1 = gr.Textbox(placeholder="dummy")
-                text_output1 = gr.Textbox(placeholder="dummy")
-                text_button1 = gr.Button("dumbo")
-                
+                with gr.Column(scale=1):
+                    addImageTab1 = gr.Image(scale=2,sources="upload",label="Upload image/images/video",interactive=True)
+                    addedImageCountTab1 = gr.Textbox(scale=1,value=0,label="Uploaded Images count",interactive=False)
+                with gr.Column(scale=6):
+                    inputImageGalleryTab1 = gr.Gallery(scale=3,label="Uploaded Images",interactive=False)
             with gr.Row():
-                text_input2 = gr.Textbox(placeholder="dummy")
-                text_output2 = gr.Textbox(placeholder="dummy")
-            text_button2 = gr.Button("CONTINUE TO STEP 2")
-        with gr.TabItem("Step 2: Landmarks creation and options selection", id=2):
+                with gr.Column(scale=3):
+                    facesetImagesMax = gr.Slider(scale=1,minimum=1,maximum=10,step=1,value=1,label="Max No. of Images",info="Choose maximum number of faces to be extracted from uploaded images. Best images will be chosen first.")
+                    facesetResolution = gr.Slider(scale=1,minimum=256,maximum=1024,value=256,step=256,label="Faceset Resolution",info="Choose faceset resolution. Extracted faces will be set to the selected resolution. Higher resolutions will need higher VideoMemory. Images lower than selected resolution will be automatically resized to the selected resolution.")
+                    facesetType = gr.Radio(scale=1,choices=["face","wholeface","head"],label="Face Type",interactive=True)
+                    
+                with gr.Column(scale=1):
+                    with gr.Accordion(label="Advanced Options"):
+                        gr.Markdown("**Extreme settings intended for high-end GPU's**")
+                        advancedSettingsEnableTab1 = gr.Checkbox(value=False,label="Enable",interactive=True)
+                        advancedFacesetImagesMax = gr.Slider(minimum=11,maximum=30,value=11,step=1,label="No.of Images",info="Choose maximum number of faces to be extracted from uploaded images. Best images will be chosen first.")
+                        advancedFacesetResolution = gr.Slider(minimum=1280,maximum=2048,value=1280,step=256,label="Faceset Resolution",info="Choose faceset resolution. Extracted faces will be set to the selected resolution. Higher resolutions will need higher VideoMemory. Images lower than selected resolution will be automatically resized to the selected resolution.")
+                        advancedRenderer = gr.Radio(choices=["CUDA","CPU"],label="Renderer backend",info="CUDA for NVIDIA GPU's")
+                    
+            with gr.Row():
+                facesetExtractButton = gr.Button("FACESET EXTRACT",interactive=True,scale=1)
+                facesetExtractProgressBar = gr.Progress(track_tqdm=False)
+            with gr.Row():
+                facesetImageGalleryTab1 = gr.Gallery(scale=9,label="Faceset Images",interactive=False)
+                nextStepButtonTab1 = gr.Button("STEP 2",scale=1,interactive=False)
+
+        with gr.Tab(step2_str, id=2) as tab2:
+            gr.Markdown(
+            """ 
+            ## """ + step2_str + """
+            """)
+            back_button2 = gr.Button("Back to "+step1_str)
             with gr.Row():
                 image_input3 = gr.Image()
-                image_output3 = gr.Image()
-                image_button3 = gr.Button("Flip")
             with gr.Row():
                 radio1 = gr.Radio(choices=["Jaffa","Guffa","Laffa","Ruffa"])
             radio_button = gr.Button("CONINUE TO STEP 3")
-        with gr.TabItem("Step 3: Training", id=3):
+
+        with gr.Tab(step3_str, id=3) as tab3:
+            gr.Markdown(
+            """ 
+            ## """ + step3_str + """
+            """)
+            back_button3 = gr.Button("<<< Back to "+step2_str)
             with gr.Row():
                 image_input9 = gr.Image()
                 gallery = gr.Gallery()
             final_button = gr.Button("CONTINUE TO STEP 4")
-        with gr.TabItem("Step 4: Object Creation", id=4):
-            textoutputfinal = gr.Textbox(value=image_count)
-            
-            text_button2.click()
-    text_button2.click(goto_step2)
+
+        with gr.Tab(step4_str, id=4) as tab4:
+            gr.Markdown(
+            """ 
+            ## """ + step4_str + """
+            """)
+            back_button4 = gr.Button("<<<< Back to "+step3_str)
+            textoutputfinal = gr.Textbox(value="3")
     
-    radio_button.click(goto_step3)
+    #initial TABS visibility
+    tab1.visible = True
+    tab2.visible = False
+    tab3.visible = False
+    tab4.visible = False
     
-    final_button.click(goto_step4)
+    #initial OPTIONS interactivity
+    facesetImagesMax.interactive=True
+    facesetResolution.interactive=True
+    advancedFacesetImagesMax.interactive=False
+    advancedFacesetResolution.interactive=False
+    advancedRenderer.interactive=False
     
-    gallery.upload(galFunc)
+    #TAB1 FUNCTIONS:
+    
+    #IMAGE GALLERY FUNC
+    addImageTab1.upload(tab1_input_gallery_update,[addImageTab1,inputImageGalleryTab1,addedImageCountTab1],[addImageTab1,inputImageGalleryTab1,addedImageCountTab1])
+    
+    #FACESET EXTRACTION
+    facesetExtractButton.click(tab1_faceset_extract,None,[facesetImageGalleryTab1,nextStepButtonTab1])
+    
+    #ADVANCED SETTINGS
+    advancedSettingsEnableTab1.select(tab1_advanced_settings,advancedSettingsEnableTab1,[facesetImagesMax,facesetResolution,advancedFacesetImagesMax,advancedFacesetResolution,advancedRenderer])
+
+
+    #CHANGING TABS
+    #Step 1-->2
+    nextStepButtonTab1.click(lambda :gr.Tab(step2_str, id=2, visible=True),None,tab2).then(lambda :gr.Tabs(selected=2), None, tabs).then(lambda :gr.Tab(step1_str, id=1, visible=False),None,tab1)
+    #Step 2-->3
+    radio_button.click(lambda :gr.Tab(step3_str, id=3, visible=True),None,tab3).then(lambda :gr.Tabs(selected=3), None, tabs).then(lambda :gr.Tab(step2_str, id=2, visible=False),None,tab2)
+    #Step 3-->4
+    final_button.click(lambda :gr.Tab(step4_str, id=4, visible=True),None,tab4).then(lambda :gr.Tabs(selected=4), None, tabs).then(lambda :gr.Tab(step3_str, id=3, visible=False),None,tab3)
+    
+    #Step 2-->1
+    back_button2.click(lambda :gr.Tab(step1_str, id=1, visible=True),None,tab1).then(lambda :gr.Tabs(selected=1), None, tabs).then(lambda :gr.Tab(step2_str, id=2, visible=False),None,tab2)
+    #Step 3-->2
+    back_button3.click(lambda :gr.Tab(step2_str, id=2, visible=True),None,tab2).then(lambda :gr.Tabs(selected=2), None, tabs).then(lambda :gr.Tab(step3_str, id=3, visible=False),None,tab3)
+    #Step 4-->3
+    back_button4.click(lambda :gr.Tab(step3_str, id=3, visible=True),None,tab3).then(lambda :gr.Tabs(selected=3), None, tabs).then(lambda :gr.Tab(step4_str, id=4, visible=False),None,tab4)
+    
     
 demo.launch()

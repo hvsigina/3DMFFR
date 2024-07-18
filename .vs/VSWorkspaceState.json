@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\utils"
   ],
-  "SelectedNode": "\\faceset.py",
+  "SelectedNode": "\\userInterface.py",
   "PreviewInSolutionExplorer": false
 }

@@ -3,9 +3,7 @@ from ast import Interactive, Lambda
 from logging import PlaceHolder
 import numpy as np
 import gradio as gr
-
-def tab1_faceset_extract():
-    return
+import faceset 
 
 def tab1_config_set():
     return
@@ -27,11 +25,22 @@ def tab1_advanced_settings(value, evt: gr.EventData):
     else:
         return [gr.Slider(interactive=True),gr.Slider(interactive=True),gr.Slider(interactive=False),gr.Slider(interactive=False),gr.Radio(interactive=False)]
 
-def tab1_faceset_extract():
-    #Run faceset extract task
+def tab1_faceset_extract(gallery):
     
+    #Run faceset extract task
+    locations = []
+    extracted_imgs = []
+    img_list = gallery
+    iter = 0
+    
+    for img in img_list: 
+        iter+=1
+        location, extracted = faceset.faceset_create(img,4,iter)
+        for loc in location:
+            locations.append(loc)
+                             
     #Faceset gallery and step2 button clickable
-    return [gr.Gallery(interactive=True),gr.Button(interactive=True)]
+    return [gr.Gallery(value=locations, interactive=True),gr.Button(interactive=True)]
 
 step1_str="Step 1: Faceset extraction"
 step2_str="Step 2: Landmarks creation and options selection"
@@ -132,7 +141,7 @@ with demo:
     addImageTab1.upload(tab1_input_gallery_update,[addImageTab1,inputImageGalleryTab1,addedImageCountTab1],[addImageTab1,inputImageGalleryTab1,addedImageCountTab1])
     
     #FACESET EXTRACTION
-    facesetExtractButton.click(tab1_faceset_extract,None,[facesetImageGalleryTab1,nextStepButtonTab1])
+    facesetExtractButton.click(tab1_faceset_extract,[inputImageGalleryTab1,],[facesetImageGalleryTab1,nextStepButtonTab1])
     
     #ADVANCED SETTINGS
     advancedSettingsEnableTab1.select(tab1_advanced_settings,advancedSettingsEnableTab1,[facesetImagesMax,facesetResolution,advancedFacesetImagesMax,advancedFacesetResolution,advancedRenderer])

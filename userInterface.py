@@ -26,7 +26,6 @@ def tab1_advanced_settings(value, evt: gr.EventData):
         return [gr.Slider(interactive=True),gr.Slider(interactive=True),gr.Slider(interactive=False),gr.Slider(interactive=False),gr.Radio(interactive=False)]
 
 def tab1_faceset_extract(gallery):
-    
     #Run faceset extract task
     locations = []
     extracted_imgs = []
@@ -40,7 +39,20 @@ def tab1_faceset_extract(gallery):
             locations.append(loc)
                              
     #Faceset gallery and step2 button clickable
-    return [gr.Gallery(value=locations, interactive=True),gr.Button(interactive=True)]
+    return [gr.Gallery(value=locations, interactive=False),gr.Button(interactive=True)]
+
+def tab1_faceset_delete(facesetImageGalleryTab1,deleteImageCount):
+    #Delete chosen image from images
+    imGallery = facesetImageGalleryTab1
+    if not (deleteImageCount is None) and not (facesetImageGalleryTab1 is None):
+        
+        imCount = int(deleteImageCount)
+    
+        if imCount > 0 and imCount <= len(imGallery):
+            del imGallery[imCount-1]
+            imCount-=1
+        
+    return [gr.Gallery(value=imGallery),"0"]
 
 step1_str="Step 1: Faceset extraction"
 step2_str="Step 2: Landmarks creation and options selection"
@@ -88,8 +100,12 @@ with demo:
                 facesetExtractButton = gr.Button("FACESET EXTRACT",interactive=True,scale=1)
                 facesetExtractProgressBar = gr.Progress(track_tqdm=False)
             with gr.Row():
-                facesetImageGalleryTab1 = gr.Gallery(scale=9,label="Faceset Images",interactive=False)
-                nextStepButtonTab1 = gr.Button("STEP 2",scale=1,interactive=False)
+                with gr.Column(scale=9):
+                    facesetImageGalleryTab1 = gr.Gallery(scale=9,label="Faceset Images",interactive=False)
+                with gr.Column(scale=1):
+                    deleteImageCount = gr.Number(value=0,scale=1,label="Enter image number to be deleted")
+                    deleteImageButton = gr.Button("Delete Image",scale=1)
+                    nextStepButtonTab1 = gr.Button("STEP 2",scale=3,interactive=False)
 
         with gr.Tab(step2_str, id=2) as tab2:
             gr.Markdown(
@@ -146,6 +162,8 @@ with demo:
     #ADVANCED SETTINGS
     advancedSettingsEnableTab1.select(tab1_advanced_settings,advancedSettingsEnableTab1,[facesetImagesMax,facesetResolution,advancedFacesetImagesMax,advancedFacesetResolution,advancedRenderer])
 
+    #DELETE IMAGE FROM FACESET
+    deleteImageButton.click(tab1_faceset_delete,[facesetImageGalleryTab1,deleteImageCount],[facesetImageGalleryTab1,deleteImageCount])
 
     #CHANGING TABS
     #Step 1-->2

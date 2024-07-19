@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "E:\\WORKSPACE\\3DMFFR\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\WORKSPACE\\3DMFFR\\utils\\configuration.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:utils\\configuration.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\WORKSPACE\\3DMFFR\\config.yaml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:config.yaml||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\WORKSPACE\\3DMFFR\\userInterface.py||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:userInterface.py||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
@@ -23,25 +31,51 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "config.yaml",
+              "DocumentMoniker": "E:\\WORKSPACE\\3DMFFR\\config.yaml",
+              "RelativeDocumentMoniker": "config.yaml",
+              "ToolTip": "E:\\WORKSPACE\\3DMFFR\\config.yaml",
+              "RelativeToolTip": "config.yaml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
+              "WhenOpened": "2024-07-19T13:53:00.506Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "configuration.py",
+              "DocumentMoniker": "E:\\WORKSPACE\\3DMFFR\\utils\\configuration.py",
+              "RelativeDocumentMoniker": "utils\\configuration.py",
+              "ToolTip": "E:\\WORKSPACE\\3DMFFR\\utils\\configuration.py",
+              "RelativeToolTip": "utils\\configuration.py",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAE0AAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-07-19T08:41:23.731Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "faceset.py",
               "DocumentMoniker": "E:\\WORKSPACE\\3DMFFR\\faceset.py",
               "RelativeDocumentMoniker": "faceset.py",
               "ToolTip": "E:\\WORKSPACE\\3DMFFR\\faceset.py",
               "RelativeToolTip": "faceset.py",
-              "ViewState": "AQIAAAgAAAAAAAAAAAAAALoAAAAnAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAALoAAAAnAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2024-07-17T06:16:42.658Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "userInterface.py",
               "DocumentMoniker": "E:\\WORKSPACE\\3DMFFR\\userInterface.py",
               "RelativeDocumentMoniker": "userInterface.py",
               "ToolTip": "E:\\WORKSPACE\\3DMFFR\\userInterface.py",
               "RelativeToolTip": "userInterface.py",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABwAAAAEAAAA",
+              "ViewState": "AQIAABoAAAAAAAAAAAAAACsAAABCAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2024-07-12T08:35:35.404Z",
               "EditorCaption": ""

@@ -4,9 +4,14 @@ from logging import PlaceHolder
 import numpy as np
 import gradio as gr
 import faceset 
+import config_mffr
 
-def tab1_config_set():
-    return
+config1 = config_mffr.config1("Tab1")
+
+def tab1_config_set(imageCount,maxImageCount,facesetResolution,faceType):
+    
+    config1.tab1_set_parameters(imageCount=imageCount,maxImageCount=maxImageCount,facesetResolution=facesetResolution,faceType=faceType)
+    return True
 
 def tab1_input_gallery_update(upload,gallery,count):
     
@@ -20,23 +25,45 @@ def tab1_input_gallery_update(upload,gallery,count):
 
 def tab1_advanced_settings(value, evt: gr.EventData):
     #Check if checkbox is enabled or not
-    if value: 
+    if value:
+        config1.tab1_set_parameters(advancedSettings=True)
         return [gr.Slider(interactive=False),gr.Slider(interactive=False),gr.Slider(interactive=True),gr.Slider(interactive=True),gr.Radio(interactive=True)]
     else:
+        config1.tab1_set_parameters(advancedSettings=False)
         return [gr.Slider(interactive=True),gr.Slider(interactive=True),gr.Slider(interactive=False),gr.Slider(interactive=False),gr.Radio(interactive=False)]
 
-def tab1_faceset_extract(gallery):
+def tab1_faceset_extract(gallery,imageCount,advfacesetImagesMax,advfacesetResolution,facesetImagesMax,facesetResolution,faceType):
+    
+    #set config params
+    if config1.tab1_get_advancedSettings() == None or not config1.tab1_get_advancedSettings() :
+        tab1_config_set(imageCount=imageCount,maxImageCount=facesetImagesMax,facesetResolution=facesetResolution,faceType=faceType)
+    else:
+        tab1_config_set(imageCount=imageCount,maxImageCount=advfacesetImagesMax,facesetResolution=advfacesetResolution,faceType=faceType)
+
+
     #Run faceset extract task
     locations = []
     extracted_imgs = []
     img_list = gallery
     iter = 0
     
+    if faceType=="face":
+        faceTyp = 0
+    elif faceType=="wholeface":
+        faceTyp = 4
+    elif faceType=="head":
+        faceTyp = 8
+
     for img in img_list: 
-        iter+=1
-        location, extracted = faceset.faceset_create(img,4,iter)
+        iter += 1
+        location = faceset.faceset_create(img,faceTyp,iter,config1.tab1_get_facesetResolution)
+        maxCount = 0
         for loc in location:
-            locations.append(loc)
+            maxCount += 1
+            if maxCount<=int(config1.tab1_get_maxImageCount()) :
+                locations.append(loc)
+    
+    
                              
     #Faceset gallery and step2 button clickable
     return [gr.Gallery(value=locations, interactive=False),gr.Button(interactive=True)]
@@ -86,15 +113,15 @@ with demo:
                 with gr.Column(scale=3):
                     facesetImagesMax = gr.Slider(scale=1,minimum=1,maximum=10,step=1,value=1,label="Max No. of Images",info="Choose maximum number of faces to be extracted from uploaded images. Best images will be chosen first.")
                     facesetResolution = gr.Slider(scale=1,minimum=256,maximum=1024,value=256,step=256,label="Faceset Resolution",info="Choose faceset resolution. Extracted faces will be set to the selected resolution. Higher resolutions will need higher VideoMemory. Images lower than selected resolution will be automatically resized to the selected resolution.")
-                    facesetType = gr.Radio(scale=1,choices=["face","wholeface","head"],label="Face Type",interactive=True)
+                    facesetType = gr.Radio(scale=1,choices=["face","wholeface","head"],label="Face Type",interactive=True,value="wholeface")
                     
                 with gr.Column(scale=1):
                     with gr.Accordion(label="Advanced Options"):
                         gr.Markdown("**Extreme settings intended for high-end GPU's**")
                         advancedSettingsEnableTab1 = gr.Checkbox(value=False,label="Enable",interactive=True)
-                        advancedFacesetImagesMax = gr.Slider(minimum=11,maximum=30,value=11,step=1,label="No.of Images",info="Choose maximum number of faces to be extracted from uploaded images. Best images will be chosen first.")
+                        advancedFacesetImagesMax = gr.Slider(minimum=11,maximum=30,value=11,step=1,label="Max No.of Images",info="Choose maximum number of faces to be extracted from uploaded images. Best images will be chosen first.")
                         advancedFacesetResolution = gr.Slider(minimum=1280,maximum=2048,value=1280,step=256,label="Faceset Resolution",info="Choose faceset resolution. Extracted faces will be set to the selected resolution. Higher resolutions will need higher VideoMemory. Images lower than selected resolution will be automatically resized to the selected resolution.")
-                        advancedRenderer = gr.Radio(choices=["CUDA","CPU"],label="Renderer backend",info="CUDA for NVIDIA GPU's")
+                        #advancedRenderer = gr.Radio(choices=["CUDA","CPU"],label="Renderer backend",info="CUDA for NVIDIA GPU's")
                     
             with gr.Row():
                 facesetExtractButton = gr.Button("FACESET EXTRACT",interactive=True,scale=1)
@@ -149,7 +176,7 @@ with demo:
     facesetResolution.interactive=True
     advancedFacesetImagesMax.interactive=False
     advancedFacesetResolution.interactive=False
-    advancedRenderer.interactive=False
+    #advancedRenderer.interactive=False
     
     #TAB1 FUNCTIONS:
     
@@ -157,10 +184,11 @@ with demo:
     addImageTab1.upload(tab1_input_gallery_update,[addImageTab1,inputImageGalleryTab1,addedImageCountTab1],[addImageTab1,inputImageGalleryTab1,addedImageCountTab1])
     
     #FACESET EXTRACTION
-    facesetExtractButton.click(tab1_faceset_extract,[inputImageGalleryTab1,],[facesetImageGalleryTab1,nextStepButtonTab1])
+    #check if advanced settings are enabled
+    facesetExtractButton.click(tab1_faceset_extract,[inputImageGalleryTab1,addedImageCountTab1,advancedFacesetImagesMax,advancedFacesetResolution,facesetImagesMax,facesetResolution,facesetType],[facesetImageGalleryTab1,nextStepButtonTab1])
     
     #ADVANCED SETTINGS
-    advancedSettingsEnableTab1.select(tab1_advanced_settings,advancedSettingsEnableTab1,[facesetImagesMax,facesetResolution,advancedFacesetImagesMax,advancedFacesetResolution,advancedRenderer])
+    advancedSettingsEnableTab1.select(tab1_advanced_settings,advancedSettingsEnableTab1,[facesetImagesMax,facesetResolution,advancedFacesetImagesMax,advancedFacesetResolution])
 
     #DELETE IMAGE FROM FACESET
     deleteImageButton.click(tab1_faceset_delete,[facesetImageGalleryTab1,deleteImageCount],[facesetImageGalleryTab1,deleteImageCount])

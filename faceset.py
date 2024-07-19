@@ -184,11 +184,9 @@ def determine_face_tilt(image2):
     
     return angle
 
-def faceset_create(img2,selected,iter):
+def faceset_create(img2,selected,iter,res):
     rotated_imgs = []
     temp_list = []
-    mode_str = ["face","wholeface","head"]
-    mode_value = [4] #0,2,4
 
     #selected = mode_value[0]
     img_name = img2[0].split("\\")[-1]
@@ -237,7 +235,7 @@ def faceset_create(img2,selected,iter):
         #print(rotated_imgs[i-1].shape)
         cv2.imwrite(temp_img_path,rotated)    
     
-    return [temp_list,rotated_imgs]
+    return temp_list
     #cv2.imwrite("./output/"+str(i)+"_"+str(selected)+"_afterDetermine.jpg",img[bbox[1]:bbox[3],bbox[0]:bbox[2]])
 
     #cv2.imwrite("./output/"+str(i)+"_"+str(selected)+"_output.jpg",rotate_image(img[bbox[1]:bbox[3],bbox[0]:bbox[2]],angle)

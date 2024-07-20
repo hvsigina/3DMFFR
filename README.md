@@ -1,7 +1,8 @@
 # 3DMFFR (Inprogress)
 3D Face Reconstruction from one or Multiple 2D images, using cuda-accelerated renderer.
 
-Face detection using insightface
+insightface
+MediaPipe
 
 Requirements:
 

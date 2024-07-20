@@ -56,7 +56,7 @@ def tab1_faceset_extract(gallery,imageCount,advfacesetImagesMax,advfacesetResolu
 
     for img in img_list: 
         iter += 1
-        location = faceset.faceset_create(img,faceTyp,iter,config1.tab1_get_facesetResolution)
+        location = faceset.faceset_create(img,faceTyp,iter,config1.tab1_get_facesetResolution())
         maxCount = 0
         for loc in location:
             maxCount += 1

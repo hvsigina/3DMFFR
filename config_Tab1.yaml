@@ -1,7 +1,7 @@
 - Tab1:
     advancedSettings: true
-    faceType: face
+    faceType: wholeface
     facesetResolution: 1792
-    imageCount: '2'
-    maxImageCount: 13
+    imageCount: '1'
+    maxImageCount: 11
     settingName: settingValue

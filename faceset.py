@@ -184,7 +184,25 @@ def determine_face_tilt(image2):
     
     return angle
 
-def faceset_create(img2,selected,iter,res):
+def padding_rotated(image):
+    
+    imgH,imgW,_ = image.shape
+    diff = 0
+    
+    if imgH < imgW:
+        diff = imgW-imgH
+        image = cv2.copyMakeBorder(image, int(diff/2),int(diff/2),0,0,cv2.BORDER_CONSTANT)
+    else:
+        diff = imgH-imgW
+        image = cv2.copyMakeBorder(image,0,0,int(diff/2),int(diff/2),cv2.BORDER_CONSTANT)
+        
+    return image
+
+def scale_to_resolution(image,res):
+    image = cv2.resize(image, (res, res))
+    return image
+
+def faceset_create(img2,selected,iter,res=256):
     rotated_imgs = []
     temp_list = []
 
@@ -201,7 +219,6 @@ def faceset_create(img2,selected,iter,res):
     for face in faces:
     
         i+=1
-        imgHeight,imgWidth,_ = img.shape
         bbox = face.bbox.astype(int)
     
     #[minx,miny,maxx,maxy]
@@ -231,6 +248,8 @@ def faceset_create(img2,selected,iter,res):
         temp_img_path = "./output/"+str(iter)+str(i)+"_"+str(selected)+".jpg"
         temp_list.append(temp_img_path)
         rotated_imgs.append(rotated)
+        rotated = padding_rotated(rotated)
+        rotated = scale_to_resolution(rotated,res)
         #print(rotated_imgs[i-1])
         #print(rotated_imgs[i-1].shape)
         cv2.imwrite(temp_img_path,rotated)    

@@ -1,9 +1,9 @@
-from utils.configuration import configuration
+from configs.configuration import configuration
 
 class config1(configuration):
     
     def __init__(self,configName):
-        super().__init__("config_"+configName+".yaml", configName)
+        super().__init__("./configs/config_"+configName+".yaml", configName)
         #initialize default parameters
         super().set_config_entry("imageCount",0)
         super().set_config_entry("maxImageCount",1)

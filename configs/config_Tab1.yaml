@@ -1,0 +1,7 @@
+- Tab1:
+    advancedSettings: null
+    faceType: wholeface
+    facesetResolution: 256
+    imageCount: 0
+    maxImageCount: 1
+    settingName: settingValue

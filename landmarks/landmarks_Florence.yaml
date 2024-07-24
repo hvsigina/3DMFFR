@@ -1,0 +1,9 @@
+- Florence:
+    inputImagePath: ''
+    input_image_path: ''
+    landmarkType: mediapipe
+    landmarks: null
+    outputImagePath: ./temp/landmarks/
+    output_image_path: ''
+    scaledLandmarks: null
+    settingName: settingValue

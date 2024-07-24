@@ -13,3 +13,8 @@ Screenshots:
 Step1:
 ![page1](https://github.com/user-attachments/assets/1d17f1da-e108-4e87-97ba-4afb79c59168)
 ![page1_after_faceset](https://github.com/user-attachments/assets/bbb9c93d-a2b3-4bc4-bc0e-f6ec2b542f3f)
+
+Download mediapipe face landmark model
+https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task
+more details: 
+https://ai.google.dev/edge/mediapipe/solutions/vision/face_landmarker/python

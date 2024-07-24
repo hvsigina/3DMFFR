@@ -3,10 +3,10 @@ from ast import Interactive, Lambda
 from logging import PlaceHolder
 import numpy as np
 import gradio as gr
-import faceset 
-import config_mffr
+import old.faceset as faceset 
+import configs.config_mffr
 
-config1 = config_mffr.config1("Tab1")
+config1 = configs.config_mffr.config1("Tab1")
 
 def tab1_config_set(imageCount,maxImageCount,facesetResolution,faceType):
     

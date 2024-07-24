@@ -19,6 +19,9 @@ mono_crash.*
 #pycache
 __pycache__/
 
+#models
+models/
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
